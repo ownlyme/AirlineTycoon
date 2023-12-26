@@ -154,7 +154,7 @@ void TEXTRES::Open(char const *source, void *cached) {
     }
 }
 
-char *TEXTRES::GetP(ULONG group, ULONG id) {
+char *TEXTRES::FindP(ULONG group, ULONG id) {
     char *text = nullptr;
     for (SLONG i = 0; i < Entries.AnzEntries(); ++i) {
         if (Entries[i].Group == group && Entries[i].Id == id) {
@@ -164,7 +164,6 @@ char *TEXTRES::GetP(ULONG group, ULONG id) {
     }
 
     if (text == nullptr) {
-        TeakLibW_Exception(FNL, ExcTextResNotFound, group, id);
         return nullptr;
     }
 
@@ -174,8 +173,20 @@ char *TEXTRES::GetP(ULONG group, ULONG id) {
     return buffer;
 }
 
-char *TEXTRES::GetS(ULONG group, ULONG id) {
-    char *str = TEXTRES::GetP(group, id);
+char *TEXTRES::GetP(ULONG group, ULONG id) {
+    char *buffer = TEXTRES::FindP(group, id);
+    if (buffer == nullptr) {
+        TeakLibW_Exception(FNL, ExcTextResNotFound, group, id);
+        return nullptr;
+    }
+    return buffer;
+}
+
+char *TEXTRES::FindS(ULONG group, ULONG id) {
+    char *str = TEXTRES::FindP(group, id);
+    if (str == nullptr) {
+        return nullptr;
+    }
 
     if (strlen(str) > 0x3FF) {
         delete[] str;
@@ -184,6 +195,16 @@ char *TEXTRES::GetS(ULONG group, ULONG id) {
     static char buffer[0x3FF];
     strcpy(buffer, str);
     delete[] str;
+    return buffer;
+}
+
+
+char *TEXTRES::GetS(ULONG group, ULONG id) {
+    char *buffer = TEXTRES::FindS(group, id);
+    if (buffer == nullptr) {
+        TeakLibW_Exception(FNL, ExcTextResNotFound, group, id);
+        return nullptr;
+    }
     return buffer;
 }
 
