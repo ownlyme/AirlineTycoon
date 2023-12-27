@@ -2837,7 +2837,7 @@ CPlane SIM::CreateRandomUsedPlane(SLONG seed) const {
 
     const SLONG thisYear = GetCurrentYear();
 
-    CPlane usedPlane = CPlane(PlaneNames.GetUnused(&rnd), PlaneTypes.GetRandomExistingType(&rnd), 100, 0);
+    CPlane usedPlane = CPlane(PlaneNames.GetUnused(&rnd), PlaneTypes.GetRandomExistingType(&rnd, CPlaneType::Available::MUSEUM), 100, 0);
 
     if (thisYear < usedPlane.ptErstbaujahr) {
         TeakLibW_Exception(FNL, "Tried to add used plane that was built before this year (%d < %d)", thisYear, usedPlane.ptErstbaujahr);
