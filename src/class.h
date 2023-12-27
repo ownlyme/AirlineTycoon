@@ -314,6 +314,7 @@ class /**/ CEinheit  // 0 = km
     SLONG Umrechnung(SLONG Value) const;
     __int64 Umrechnung64(__int64 Value) const;
     char *bString(SLONG Value) const;
+    char *bShortString(SLONG Value) const;
     char *bString64(__int64 Value) const;
 };
 
@@ -2375,6 +2376,7 @@ class COptions {
     BOOL OptionRoundNumber{};
     BOOL OptionSpeechBubble{};
     BOOL OptionRandomStartday{};
+    ULONG OptionTicketPriceIncrement{};
     std::array<CString, 4> OptionPlayerNames{};
     std::array<CString, 4> OptionAirlineNames{};
     std::array<CString, 4> OptionAirlineAbk{};
