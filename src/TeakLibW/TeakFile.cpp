@@ -153,7 +153,9 @@ bool CRLEReader::Close() {
     if (Ctx == nullptr) {
         return false;
     }
-    return SDL_RWclose(Ctx) == 0;
+    auto toClose = Ctx;
+    Ctx = nullptr;
+    return SDL_RWclose(toClose) == 0;
 }
 
 void CRLEReader::SaveAsPlainText() {
@@ -260,7 +262,7 @@ BOOL isCRLE(char const *path) {
 BUFFER_V<BYTE> LoadCompleteFile(char const *path) {
     BOOL _isCRLE = isCRLE(path);
 
-    if (_isCRLE && CRLEReader::UpdateDataBeforeOpening) {
+    if ((!DoesFileExist(path) || _isCRLE) && CRLEReader::UpdateDataBeforeOpening) {
         CRLEWriter writer(path);
         writer.UpdateFromPlainText();
         writer.Close();
@@ -285,10 +287,13 @@ BUFFER_V<BYTE> LoadCompleteFile(char const *path) {
 CRLEWriter::CRLEWriter(const char *path) : Ctx(nullptr), Version(0x102), Key(0xA5), Magic("xtRLE"), Path(path), Sequence() {}
 CRLEWriter::~CRLEWriter() { Close(); }
 bool CRLEWriter::Close() {
-    if (Ctx == nullptr) {
-        return false;
+    bool wasClosed = false;
+    if (Ctx != nullptr) {
+        // Close and set to null to avoid segfaults on multiple Close() calls.
+        wasClosed = SDL_RWclose(Ctx) == 0;
+        Ctx = nullptr;
     }
-    return SDL_RWclose(Ctx) == 0;
+    return wasClosed;
 }
 
 SLONG CRLEWriter::GetNextSequence(const unsigned char *buffer, SLONG size, SLONG consumed) {
