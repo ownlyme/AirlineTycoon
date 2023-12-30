@@ -16,8 +16,6 @@ extern CPlanePartRelation gPlanePartRelations[307];
 
 SB_CFont FontVerySmall;
 
-extern char chRegKeyOld[];
-
 DWORD GetKey();
 
 //--------------------------------------------------------------------------------------------
