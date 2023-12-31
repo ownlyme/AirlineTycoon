@@ -31,6 +31,7 @@ You can see the instructions to build and run the project in [BUILDING.md](BUILD
 
 General:
 * Now runnable on Linux
+* Allow the game to be ran Windowed / Borderless / Fullscreen
 
 Statistics screen:
 * Showing far more categories where money was spent
@@ -99,6 +100,9 @@ Bug fixes:
     * Always rotate list of plane saldo for past 7 days
 * Consider also number of first class passengers for statistics
 * Do not show route utilization by defeated players
+* New sound options (OGG/MIDI) + patched stuttering glich when switching music on Windows 11
+* Patched Space station mission prices and texts in stats
+* Patched various text scrambling on UI
 
 AI:
 * Uses now same credit limit
@@ -126,3 +130,14 @@ Misc:
 * Buy kerosene by clicking price chart
 * Change tooltip of savegames (number of days played)
 * Decryption of data files with the run argument "/savedata"
+* Option "OptionTicketPriceIncrement" to increase ticket price increment per click
+* Director's board now allow for more post-it
+* Added options "OptionRentOffice*" to customise the branch number available / day.
+* Director's board post-it system improved and allow for more cities (up to 7)
+
+## Credits and Contributors
+
+- [WizzardMaker](https://github.com/WizzardMaker) - Main contributor and maintainer
+- [CrossVR](https://github.com/CrossVR) - Original contributor
+- [mertenpopp](https://github.com/mertenpopp) - Contributor
+- [wackfx](https://github.com/wackfx) - Contributor
