@@ -2,6 +2,8 @@
 
 #include "StdAfx.h"
 
+#define AT_Log(...) AT_Log_I("TextRes", __VA_ARGS__)
+
 const char *ExcTextResNotOpened = "TextRes not opened!";
 const char *ExcTextResStaticOverflow = "TextRes is too long: %lx:%lx";
 const char *ExcTextResFormat = "Bad TextRes format: %s (%li)";
@@ -25,7 +27,7 @@ std::string FindLanguageInString(const char* Dst, const SLONG wantedLanguageInde
 }
 
 void LanguageSpecifyString(char *Dst) {
-    const SLONG wantedLanguageIndex = 2;//gLanguage;
+    const SLONG wantedLanguageIndex = gLanguage;
 
     std::string foundText = FindLanguageInString(Dst, wantedLanguageIndex);
     if (foundText.empty()) {
@@ -57,6 +59,11 @@ void TEXTRES::Open(char const *source, void *cached) {
     if (cached != nullptr) {
         SLONG Group = -1;
         SLONG Identifier = -1;
+
+        if (!DoesFileExist(source)) {
+            AT_Log("TextRes file not found: %s", source);
+            return;
+        }
 
         auto FileBuffer = LoadCompleteFile(source);
         char *String = new char[0x400U];
