@@ -10,9 +10,9 @@ const char *ExcTextResFormat = "Bad TextRes format: %s (%li)";
 const char *ExcTextResNotFound = "The following translation was not found: %s>>%li";
 
 SLONG gLanguage;
+const std::string allLanguageTokens = "DEFTPNISOBJKLMNQRTUV";
 
 std::string FindLanguageInString(const char* Dst, const SLONG wantedLanguageIndex) {
-    const std::string allLanguageTokens = "DEFTPNISOBJKLMNQRTUV";
 
     const std::string targetLanguageToken(1, allLanguageTokens[wantedLanguageIndex]);
     std::regex languageTextPattern("^.*" + targetLanguageToken + "::(.*?)(?:[" + allLanguageTokens + "]::.*)?$");
@@ -27,7 +27,17 @@ std::string FindLanguageInString(const char* Dst, const SLONG wantedLanguageInde
 }
 
 void LanguageSpecifyString(char *Dst) {
-    const SLONG wantedLanguageIndex = gLanguage;
+    SLONG wantedLanguageIndex = min(gLanguage, allLanguageTokens.length());
+
+    if (wantedLanguageIndex != gLanguage) {
+        static bool warned = false;
+        if (!warned) {
+            AT_Log("Language %li not found, using fallback english", gLanguage);
+            warned = true;
+        }
+
+        wantedLanguageIndex = 1;
+    }
 
     std::string foundText = FindLanguageInString(Dst, wantedLanguageIndex);
     if (foundText.empty()) {
